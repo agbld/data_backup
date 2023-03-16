@@ -25,10 +25,16 @@ for item in main_pbar:
         # 創建一個子進度條，顯示單個文件的複製情況
         file_size = os.path.getsize(src_path)
         sub_pbar = tqdm.tqdm(total=file_size, desc=item, leave=False)
-        def file_progress(count, block_size, total_size):
-            # 更新子進度條的值
-            sub_pbar.update(min(count * block_size - sub_pbar.n, total_size))
-        shutil.copyfile(src_path, dst_path)
+        # 使用shutil.copy函數來複製文件，並在每次寫入後更新子進度條的值
+        with open(src_path, "rb") as src_file:
+            with open(dst_path, "wb") as dst_file:
+                while True:
+                    data = src_file.read(1024) # 每次讀取1024字節
+                    if not data: # 如果沒有數據了，跳出循環
+                        break
+                    dst_file.write(data) # 將數據寫入目標文件
+                    sub_pbar.update(len(data)) # 更新子進度條的值
+                    
         sub_pbar.close()
     elif os.path.isdir(src_path):
         # 複製整個文件夾，不顯示子進度條
