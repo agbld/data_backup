@@ -39,4 +39,4 @@ for filename in os.listdir(directory):
                 new_filepath = os.path.join(directory, new_filename)
                 # save the chunk as a new csv file using pandas 
                 chunk.to_csv(new_filepath, index=False)
-        os.remove(filepath)
+            os.remove(filepath)
